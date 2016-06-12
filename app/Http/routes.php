@@ -16,27 +16,18 @@
 //});
 
 
-// Authentication routes...
-Route::get('auth/login', 'Auth\AuthController@getLogin');
-Route::post('auth/login', 'Auth\AuthController@postLogin');
-Route::get('auth/logout', 'Auth\AuthController@getLogout');
-
-
-// Registration routes...
-Route::get('auth/register', 'Auth\AuthController@getRegister');
-Route::post('auth/register', 'Auth\AuthController@postRegister');
 //home page
 Route::get('/', 'HomeController@index');
 
 
 //admin pages
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin','middleware' =>
+Route::group(['prefix' => 'admin', 'middleware' =>
 'auth'], function() 
 {   //middware needed here
-Route::get('/', 'AdminHomeController@index');
+Route::get('/', 'Admin\AdminHomeController@index');
 Route::resource('pages', 'PagesController');
-Route::resource('articles', 'ArticlesController');
-Route::resource('comments', 'CommentsController');
+Route::resource('articles', 'Admin\ArticlesController');
+Route::resource('comments', 'Admin\CommentsController');
 });
 //web pages
 Route::get('pages/{id}', 'PagesController@show');
@@ -45,4 +36,6 @@ Route::get('articles/{id}', 'ArticlesController@show');
 //comments submit
 Route::post('comment/store', 'CommentsController@store');
 
-?>
+Route::auth();
+
+Route::get('/home', 'HomeController@index');
